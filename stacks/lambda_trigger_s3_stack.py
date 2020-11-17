@@ -39,3 +39,6 @@ class LambdaTriggerS3Stack(core.Stack):
 
         # lambdaの権限
         bucket.grant_read(lambda_)
+
+        # 外部へリソース参照
+        self.bucket = bucket
