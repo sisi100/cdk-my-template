@@ -3,6 +3,5 @@ def lambda_handler(event, context):
 
     return {
         "statusCode": 200,
-        "headers": {},
         "body": f'hoge={query["hoge"]}, hogeOption={query.get("hogeOption")}',
     }
