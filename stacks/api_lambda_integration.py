@@ -15,6 +15,20 @@ class ApiLambdaIntegrationStack(core.Stack):
         )
 
         # API Gateway
-        api = aws_apigateway.RestApi(self, "ApiLambdaIntegrationApiGateway")
+        api = aws_apigateway.RestApi(
+            self, "ApiLambdaIntegrationApiGateway", deploy_options=aws_apigateway.StageOptions(stage_name="hogehoge")
+        )
         hoge_resources = api.root.add_resource("hoge")
-        hoge_resources.add_method("GET", aws_apigateway.LambdaIntegration(lambda_))
+        hoge_resources.add_method(
+            "GET",
+            aws_apigateway.LambdaIntegration(lambda_),
+            request_parameters={
+                # クエリ文字列（URLパラメータ）の明示的に宣言
+                "method.request.querystring.hoge": True,  # 必須
+                "method.request.querystring.hogeOption": False,  # 必須ではない
+            },
+            # 下記設定を入れないと必須フラグは動作しない
+            request_validator=api.add_request_validator(
+                "ApiLambdaIntegrationValidator", validate_request_parameters=True
+            ),
+        )
