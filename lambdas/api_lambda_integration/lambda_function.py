@@ -1,10 +1,8 @@
 def lambda_handler(event, context):
+    query = event["queryStringParameters"]
 
     return {
         "statusCode": 200,
-        "headers": {
-            "Content-Disposition": 'attachment;filename="hoge.txt"',
-            "Content-Type": "text/plain",
-        },
-        "body": "hogehogeなのだよ",
+        "headers": {},
+        "body": f'hoge={query["hoge"]}, hogeOption={query.get("hogeOption")}',
     }

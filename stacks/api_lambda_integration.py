@@ -17,4 +17,16 @@ class ApiLambdaIntegrationStack(core.Stack):
         # API Gateway
         api = aws_apigateway.RestApi(self, "ApiLambdaIntegrationApiGateway")
         hoge_resources = api.root.add_resource("hoge")
-        hoge_resources.add_method("GET", aws_apigateway.LambdaIntegration(lambda_))
+        hoge_resources.add_method(
+            "GET",
+            aws_apigateway.LambdaIntegration(lambda_),
+            request_parameters={
+                # URLクエリーパラメータを設定する
+                "method.request.querystring.hoge": True,
+                "method.request.querystring.hogeOption": False,
+            },
+            # バリデーターを設定しないとパラメータの必須フラグは動作しない
+            request_validator=api.add_request_validator(
+                "ApiLambdaIntegrationValidator", validate_request_parameters=True
+            ),
+        )
