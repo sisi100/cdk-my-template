@@ -1,5 +1,5 @@
 from aws_cdk import core
-from aws_cdk.aws_dynamodb import Attribute, AttributeType, Table
+from aws_cdk.aws_dynamodb import Attribute, AttributeType, BillingMode, Table
 
 
 class DynamoTableStack(core.Stack):
@@ -12,5 +12,6 @@ class DynamoTableStack(core.Stack):
             "DynamoTableTable",
             partition_key=Attribute(name="pk", type=AttributeType.NUMBER),  # パーテーションキー
             sort_key=Attribute(name="sk", type=AttributeType.STRING),  # ソートキー
+            billing_mode=BillingMode.PAY_PER_REQUEST,  # オンデマンドに設定
             removal_policy=core.RemovalPolicy.DESTROY,  # Stackの削除と一緒にテーブルを削除する(オプション)
         )
